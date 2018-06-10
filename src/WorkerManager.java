@@ -90,24 +90,26 @@ public class WorkerManager {
 	}
 
 
-	public void handleGasWorkers()
-	{
+	/**
+	 * @modifier sc76.choi
+	 * 
+	 * 가스량이 미네랄의 3배가 넘게 되면, 가스 일꾼을 보정하여, 미네랄을 채집할 수 있도록 한다.
+	 */
+	public void handleGasWorkers(){
+		
 		// for each unit we have
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits())
-		{
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()){
 			// refinery 가 건설 completed 되었으면,
-			if (unit.getType().isRefinery() && unit.isCompleted() )
-			{
+			if (unit.getType().isRefinery() && unit.isCompleted() )	{
+				
 				// get the number of workers currently assigned to it
 				int numAssigned = workerData.getNumAssignedWorkers(unit);
 
 				// if it's less than we want it to be, fill 'er up
 				// 단점 : 미네랄 일꾼은 적은데 가스 일꾼은 무조건 3~4명인 경우 발생.
-				for (int i = 0; i<(Config.WorkersPerRefinery - numAssigned); ++i)
-				{
+				for (int i = 0; i<(Config.WorkersPerRefinery - numAssigned); ++i){
 					Unit gasWorker = chooseGasWorkerFromMineralWorkers(unit);
-					if (gasWorker != null)
-					{
+					if (gasWorker != null){
 						workerData.setWorkerJob(gasWorker, WorkerData.WorkerJob.Gas, unit);
 					}
 				}
